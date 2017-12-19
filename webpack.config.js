@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const VENDOR_LIBS = [
     "faker", "lodash", "react", "react-dom", "react-input-range",
@@ -35,6 +36,21 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: './src/index.html'
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+        }),
+        new BrowserSyncPlugin(
+        {
+            host: 'localhost',
+            port: 3000,
+            proxy: 'http://localhost:3050/'
         })
-    ]
+    ],
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        port: 3050,
+        hot: true
+    }
 };
